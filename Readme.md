@@ -289,6 +289,7 @@ feed
 
 ## 🧩 Заходим в Presentation Layer (UI)
 
+```pseudo
 //тут вверху какие-то импорты модулей или функций из слоя бизнеса
 
 function main():
@@ -302,11 +303,13 @@ function main():
         result = service.feed() //если feed, то вызываем из слоя бизнес логики метод/функцию/процедуру
         print(result)
 }
+```
 
 ---
 
 ## 🧠 Service Layer (Business Logic) отдельный модуль/файл с логикой, возможно как-то еще подробить можно
 
+```pseudo
 //тут вверху какие-то импорты из слоя данных
 
 function feed():
@@ -333,11 +336,13 @@ function feed():
 
     return status //возвращаем что-то, типа какое сейчас состояние
 }
+```
 
 ---
 
 ## 🗄 Data Layer (Repository) операционные дела - забрать из базы, положить, проапдейтить
 
+```pseudo
 function get_status():
     return DB.SELECT_ONE("SELECT * FROM dog_status")
 
@@ -349,6 +354,7 @@ function save_status(status):
 
 function log_event(log):
     DB.EXECUTE("INSERT INTO dog_logs(event_name, old_value, new_value, delta, created_at) VALUES (...)")
+```
 
 ---
 
@@ -408,6 +414,7 @@ tick
 
 ## 🧩 Presentation Layer (UI)
 
+```pseudo
 function main():
 
 {
@@ -419,11 +426,13 @@ function main():
         result = service.tick()
         print(result)
 }
+```
 
 ---
 
 ## 🧠 Service Layer (Business Logic)
 
+```pseudo
 function tick():
 
 {
@@ -457,11 +466,13 @@ function tick():
 
     return status
 }
+```
 
 ---
 
 ## 🗄 Data Layer (Repository)
 
+```pseudo
 function get_status():
     return DB.SELECT_ONE("SELECT * FROM dog_status")
 
@@ -470,6 +481,7 @@ function save_status(status):
 
 function log_event(log):
     DB.EXECUTE("INSERT INTO dog_logs(event_name, old_value, new_value, delta, created_at) VALUES (...)")
+```
 
 ---
 
