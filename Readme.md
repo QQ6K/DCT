@@ -292,6 +292,7 @@ feed
 //тут вверху какие-то импорты модулей или функций из слоя бизнеса
 
 function main():
+
 {
     input = read_console() //что-то прочитали откуда-то (из консоли)
 
@@ -301,12 +302,15 @@ function main():
         result = service.feed() //если feed, то вызываем из слоя бизнес логики метод/функцию/процедуру
         print(result)
 }
+
 ---
 
 ## 🧠 Service Layer (Business Logic) отдельный модуль/файл с логикой, возможно как-то еще подробить можно
 
 //тут вверху какие-то импорты из слоя данных
+
 function feed():
+
 {
     status = repository.get_status() //забрали из БД текущий статус/состояние питомца, значение желания немного перекусить и подкрепиться
     event = repository.get_event("feed") //забрали из БД событие
@@ -329,6 +333,7 @@ function feed():
 
     return status //возвращаем что-то, типа какое сейчас состояние
 }
+
 ---
 
 ## 🗄 Data Layer (Repository) операционные дела - забрать из базы, положить, проапдейтить
@@ -404,6 +409,7 @@ tick
 ## 🧩 Presentation Layer (UI)
 
 function main():
+
 {
     input = read_console()
 
@@ -413,11 +419,13 @@ function main():
         result = service.tick()
         print(result)
 }
+
 ---
 
 ## 🧠 Service Layer (Business Logic)
 
 function tick():
+
 {
     status = repository.get_status()
 
@@ -449,6 +457,7 @@ function tick():
 
     return status
 }
+
 ---
 
 ## 🗄 Data Layer (Repository)
