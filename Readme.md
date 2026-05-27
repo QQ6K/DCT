@@ -216,31 +216,28 @@
 
 Диаграмма отражает структуру данных и связи между сущностями.
 
+```mermaid
 erDiagram
 
     Dog {
-        int id PK
+        int id
         int hunger_score
         int water_score
         int walk_score
         int rest_score
-        datetime updated_at
     }
 
     Event {
-        int id PK
+        int id
         string name
-        string score_field
         int score_delta
     }
 
     DogLog {
-        int id PK
+        int id
         string event_name
-        string score_field
         int delta
-        datetime created_at
-        int event_id FK
     }
 
+    Event ||--o{ DogLog : triggers
     Event ||--o{ DogLog : triggers
