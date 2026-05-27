@@ -241,7 +241,7 @@ erDiagram
 
    Dog ||--o{ DogLog : has
     Event ||--o{ DogLog : triggers
-
+```
 
 
 # 🍖 Команда FEED — полный путь выполнения (пример с псевдокодом)
