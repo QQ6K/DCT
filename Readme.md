@@ -216,17 +216,9 @@
 
 Диаграмма отражает структуру данных и связи между сущностями.
 
-```mermaid id="k8n2ld"
 erDiagram
 
-    EVENT_TYPES {
-        int id PK
-        string name
-        string score_field
-        int score_delta
-    }
-
-    DOG_STATUS {
+    Dog {
         int id PK
         int hunger_score
         int water_score
@@ -235,15 +227,20 @@ erDiagram
         datetime updated_at
     }
 
-    DOG_LOGS {
+    Event {
+        int id PK
+        string name
+        string score_field
+        int score_delta
+    }
+
+    DogLog {
         int id PK
         string event_name
         string score_field
         int delta
         datetime created_at
-        int event_type_id FK
+        int event_id FK
     }
 
-    EVENT_TYPES ||--o{ DOG_LOGS : "defines"
-
----
+    Event ||--o{ DogLog : triggers
