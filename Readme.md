@@ -240,7 +240,8 @@ erDiagram
         int delta
     }
 
-     Event ||--o{ DogLog : triggers
+   Dog ||--o{ DogLog : has
+    Event ||--o{ DogLog : triggers
 
 
 
