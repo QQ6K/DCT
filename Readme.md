@@ -235,11 +235,13 @@ erDiagram
 
     DogLog {
         int id
-        string event_name
+        int dog_id
+        int event_id
         int delta
+        datetime created_at
     }
 
-   Dog ||--o{ DogLog : has
+    Dog ||--o{ DogLog : has
     Event ||--o{ DogLog : triggers
 ```
 
