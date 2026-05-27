@@ -216,6 +216,7 @@
 
 Диаграмма отражает структуру данных и связи между сущностями.
 
+```text
 ```mermaid
 erDiagram
 
@@ -239,7 +240,7 @@ erDiagram
         int delta
     }
 
-    Event ||--o{ DogLog : triggers
+     Event ||--o{ DogLog : triggers
 
 
 
