@@ -240,4 +240,239 @@ erDiagram
     }
 
     Event ||--o{ DogLog : triggers
-    Event ||--o{ DogLog : triggers
+
+
+---
+
+# 🍖 Команда FEED — полный путь выполнения (пример с псевдокодом)
+
+---
+
+## 👤 Ввод пользователя (Console)
+
+Пользователь вводит команду:
+
+feed
+
+---
+
+## 🧩 Presentation Layer (UI)
+
+function main():
+
+    input = read_console()
+
+    command = parse_command(input)
+
+    if command.type == "FEED":
+        result = service.feed()
+        print(result)
+
+---
+
+## 🧠 Service Layer (Business Logic)
+
+function feed():
+
+    status = repository.get_status()
+    event = repository.get_event("feed")
+
+    old_hunger = status.hunger
+
+    status.hunger = status.hunger + event.delta
+
+    if status.hunger > MAX_HUNGER:
+        status.hunger = MAX_HUNGER
+
+    repository.save_status(status)
+
+    repository.log_event({
+        event_name: "feed",
+        old_value: old_hunger,
+        new_value: status.hunger,
+        delta: event.delta
+    })
+
+    return status
+
+---
+
+## 🗄 Data Layer (Repository)
+
+function get_status():
+    return DB.SELECT_ONE("SELECT * FROM dog_status")
+
+function get_event(name):
+    return DB.SELECT_ONE("SELECT * FROM event_types WHERE name = name")
+
+function save_status(status):
+    DB.EXECUTE("UPDATE dog_status SET hunger=?, water=?, walk=?, rest=?, updated_at=NOW()")
+
+function log_event(log):
+    DB.EXECUTE("INSERT INTO dog_logs(event_name, old_value, new_value, delta, created_at) VALUES (...)")
+
+---
+
+## 🗄 Database (изменение состояния)
+
+BEFORE:
+hunger = 5
+
+EVENT:
+feed (+3)
+
+AFTER:
+hunger = 8
+
+dog_logs:
+feed | 5 → 8 | +3
+
+---
+
+## 🔁 Общий поток выполнения
+
+Console → UI → Service → Data → DB → Service → UI
+
+---
+
+## 🧠 Смысл
+
+UI слой:
+- принимает ввод
+- вызывает сервис
+- выводит результат
+
+Service слой:
+- применяет бизнес-логику
+- изменяет состояние
+
+Data слой:
+- читает и записывает данные
+
+Database:
+- хранит состояние и историю
+
+
+# ⏱ Команда TICK — полный путь выполнения (пример с псевдокодом)
+
+---
+
+## 👤 Ввод пользователя (Console)
+
+Пользователь вводит команду:
+
+tick
+
+---
+
+## 🧩 Presentation Layer (UI)
+
+function main():
+
+    input = read_console()
+
+    command = parse_command(input)
+
+    if command.type == "TICK":
+        result = service.tick()
+        print(result)
+
+---
+
+## 🧠 Service Layer (Business Logic)
+
+function tick():
+
+    status = repository.get_status()
+
+    status.hunger = status.hunger - 1
+    status.water = status.water - 1
+    status.walk = status.walk - 1
+    status.rest = status.rest - 1
+
+    if status.hunger < 0:
+        status.hunger = 0
+
+    if status.water < 0:
+        status.water = 0
+
+    if status.walk < 0:
+        status.walk = 0
+
+    if status.rest < 0:
+        status.rest = 0
+
+    repository.save_status(status)
+
+    repository.log_event({
+        event_name: "tick",
+        old_value: "multiple",
+        new_value: "multiple",
+        delta: -1
+    })
+
+    return status
+
+---
+
+## 🗄 Data Layer (Repository)
+
+function get_status():
+    return DB.SELECT_ONE("SELECT * FROM dog_status")
+
+function save_status(status):
+    DB.EXECUTE("UPDATE dog_status SET hunger=?, water=?, walk=?, rest=?, updated_at=NOW()")
+
+function log_event(log):
+    DB.EXECUTE("INSERT INTO dog_logs(event_name, old_value, new_value, delta, created_at) VALUES (...)")
+
+---
+
+## 🗄 Database (изменение состояния)
+
+BEFORE:
+
+hunger = 5  
+water = 6  
+walk = 7  
+rest = 4  
+
+EVENT:
+
+tick (-1 all)
+
+AFTER:
+
+hunger = 4  
+water = 5  
+walk = 6  
+rest = 3  
+
+dog_logs:
+tick | state decreased | -1
+
+---
+
+## 🔁 Общий поток выполнения
+
+Console → UI → Service → Data → DB → Service → UI
+
+---
+
+## 🧠 Смысл
+
+UI слой:
+- принимает команду
+- передаёт в сервис
+- выводит результат
+
+Service слой:
+- уменьшает показатели со временем
+- применяет ограничения (не ниже 0)
+
+Data слой:
+- сохраняет изменения
+- пишет лог
+
+Database:
+- хранит текущее состояние и историю
